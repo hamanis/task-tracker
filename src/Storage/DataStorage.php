@@ -4,6 +4,15 @@ namespace App\Storage;
 
 use App\Model;
 
+/**
+ * @TODO так как предполагается что классы моделей будут унаследованы от
+ *       абстрактного класса, то выполнение запросов стоит вынести туда, а в
+ *       классах моделей стоит переопределить вызов методов родительского класса.
+ *       А здесь останется только реализовать вызов методов инициализирующие
+ *       запросы к БД.
+ *       Данных подход позволит легче поддерживать и расширять возможности
+ *       проектов (class Project) и задач (class Task)
+ */
 class DataStorage
 {
     /**
@@ -24,6 +33,9 @@ class DataStorage
     {
         $stmt = $this->pdo->query('SELECT * FROM project WHERE id = ' . (int) $projectId);
 
+        /**
+         * @TODO присваивание значения лучше вынести из условия
+         */
         if ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             return new Model\Project($row);
         }
@@ -38,6 +50,10 @@ class DataStorage
      */
     public function getTasksByProjectId(int $project_id, $limit, $offset)
     {
+        /**
+         * @TODO $limit и $offset можно передать в запрос метода query и тогда
+         *       вызов execute не потребуется
+         */
         $stmt = $this->pdo->query("SELECT * FROM task WHERE project_id = $project_id LIMIT ?, ?");
         $stmt->execute([$limit, $offset]);
 

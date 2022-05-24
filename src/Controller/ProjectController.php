@@ -9,7 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProjectController 
+/**
+ * @TODO либо использовать Response, либо JsonResponse, код станет однозначнее.
+ *       Лучше использовать Response, так как он позволяет возвращать не только json
+ *
+ * @TODO добавить типизацию методам и аргументам методов
+ */
+class ProjectController
 {
     /**
      * @var DataStorage
@@ -62,11 +68,23 @@ class ProjectController
      */
     public function projectCreateTaskAction(Request $request)
     {
+        /**
+         * @TODO метод getProjectById может вбросить исключение. Необходимо
+         *       предусмотреть обработку ошибок
+         */
 		$project = $this->storage->getProjectById($request->get('id'));
 		if (!$project) {
 			return new JsonResponse(['error' => 'Not found']);
 		}
-		
+
+        /**
+         * @TODO вызов createTask лучше вынести в отдельную переменную и потом
+         *       ее передавать в JsonResponse
+         *
+         * @TODO не стоит передавать $_REQUEST в качестве аргумента. лучше
+         *       передать то что требуется методу createTask с предварительной
+         *       валидацией
+         */
 		return new JsonResponse(
 			$this->storage->createTask($_REQUEST, $project->getId())
 		);

@@ -2,6 +2,13 @@
 
 namespace App\Model;
 
+/**
+ * @TODO для классов Project и Task стоит реализовать родительский абстрактный
+ *       класс, который будет унаследован от JsonSerializable и вынести туда
+ *       методы getId, jsonSerialize
+ *
+ * @TODO добавить типизацию методам и аргументам методов
+ */
 class Project
 {
     /**
@@ -23,6 +30,8 @@ class Project
     }
 
     /**
+     * @TODO при наследовании от абстрактного класса (см. коммент выше) метод не потребуется
+     *
      * @return string
      */
     public function toJson()
